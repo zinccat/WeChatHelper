@@ -8,15 +8,19 @@ A user-friendly tool to collect, analyze, and send messages on WeChat using Wech
 ## Usage
 
 ### Prerequisites
-1. Generate a UUID and request a token from http://pad-local.com/#/tokens.
+0. Install Docker (https://docs.docker.com/engine/install/) and Wechaty (https://github.com/wechaty/python-wechaty).
+1. Generate a UUID (https://www.uuid.online/) and request a token from http://pad-local.com/#/tokens.
 2. Modify the related values in `start.sh` and `bot.py` with the obtained token.
 
 ### Steps
 
 1. Start the Wechaty service:
+
+If you are using Linux/MacOS,
 ```shell
 sh start.sh
 ```
+If you are using Windows, check https://wechaty.js.org/2021/05/18/win10-use-docker-build-web-protocol-server-develop-bot/.
 
 2. Launch the bot:
 ```python
