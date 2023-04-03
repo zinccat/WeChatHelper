@@ -2,6 +2,11 @@ import csv
 from datetime import datetime
 import re
 import zhconv
+import openai
+import os
+
+# use your own OPENAI API key
+openai.api_key = 'sk-xxxxxxxxxxx'
 
 def formatting(s, user):
     # s, flag = formatting_ref(s)
@@ -43,7 +48,10 @@ def formatting_ref(s, user):
     user2 = match.group(1)
     last_message = match.group(2).lstrip('\n')
     message = match.group(3)
-    s = "[{}]回复[{}]说的'{}', 说'{}'. ".format(user, user2, last_message, message)
+    if len(last_message) > 50:
+        s = "[{}]回复[{}]说'{}'. ".format(user, user2, message)
+    else:
+        s = "[{}]回复[{}]说的'{}', 说'{}'. ".format(user, user2, last_message, message)
     return s, True
 
 
@@ -69,7 +77,7 @@ def formatting_at(s, user):
         return s, True
     return s, False
 
-def main(filename):
+def merge(filename):
     # filename = ''
     data = []
     with open(filename, 'r') as csvfile:
@@ -90,9 +98,29 @@ def main(filename):
         output_text = formatting(input_text, user=row['User'])
         merged_string += output_text
 
-    print(merged_string)
     return merged_string
 
+def gpt(inputs: str, model: str = "gpt-3.5-turbo", temperature: float = 0.3) -> str:
+    prompt = """你是一个群聊信息助手, 请为以下群聊消息按照话题分点撰写详细的总结, 其中[]扩起的为用户昵称, ''扩起的为消息.
+
+格式:
+1.
+2.
+3."""
+
+    output = openai.ChatCompletion.create(
+        model=model,
+        messages=[
+            {"role": "system", "content": prompt},
+            {"role": "user", "content": inputs},
+        ],
+        temperature=temperature
+    )
+    return output.choices[0]['message']['content']
+
 if __name__ == '__main__':
-    filename = ''
-    main(filename)
+    filename = 'filepath'
+    merged_string = merge(filename)
+    print("Before summary:\n", merged_string)
+    print("-"*80)
+    print("After summary:\n", gpt(merged_string)) #, model='gpt-4'))

@@ -1,25 +1,32 @@
 # WeChatHelper
-Collect, analyze, and send messages on WeChat using Wechaty and GPT.
+A user-friendly tool to collect, analyze, and send messages on WeChat using Wechaty and GPT.
 
-Features:
+## Features
+1. Host a WeChat bot that can save all your text messages into a CSV file.
+2. Summarize group chat's history using GPT.
 
-1. Host WeChat bot that can save all your text messages into csv.
-2. Summarize group chats using GPT.
+## Usage
 
-Usage:
+### Prerequisites
+1. Generate a UUID and request a token from http://pad-local.com/#/tokens.
+2. Modify the related values in `start.sh` and `bot.py` with the obtained token.
 
-1. You'll need to generate an uuid first and request a token from http://pad-local.com/#/tokens , modify all related values in start.sh and bot.py.
+### Steps
 
-2. Start the Wechaty service
+1. Start the Wechaty service:
 ```shell
 sh start.sh
 ```
 
-3. Start the bot
+2. Launch the bot:
 ```python
-pythn bot.py
+python bot.py
 ```
 
-4. After collecting the messages, use parse_csv.py to get a merged version of a group chat history.
+3. After collecting the messages, use `summary.py` to generate a merged version of a group chat history and summarize it. Make sure to set the file you want to process.
 
-5. Use GPT to summarize the group chat history.
+```python
+python summary.py
+```
+
+Enjoy using WeChatHelper to manage and analyze your WeChat messages!
