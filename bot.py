@@ -48,6 +48,15 @@ def append_to_csv(file_name, user, text):
         current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         writer.writerow([user, current_time, text])
 
+def get_name(contact):
+    if contact.payload.alias.strip() != '':
+        identity = contact.payload.alias
+    elif contact.payload.name.strip() != '':
+        identity = contact.payload.name
+    else:
+        identity = contact.contact_id
+    return identity
+
 class MyBot(Wechaty):
 
     async def on_message(self, msg: Message):
@@ -65,10 +74,11 @@ class MyBot(Wechaty):
         if room is not None:
             filename = rootpath+'/room/'+room.payload.topic+'.csv'
         else:
-            if to_contact is not None:
-                filename = rootpath+'/user/'+to_contact.payload.alias+'.csv'
+            # TODO:
+            if to_contact.payload.name != "please change to your own wechat alias":
+                filename = rootpath+'/user/'+get_name(to_contact)+'.csv'
             else:
-                filename = rootpath+'/user/'+from_contact.payload.alias+'.csv'
+                filename = rootpath+'/user/'+get_name(from_contact)+'.csv'
         # message = {
         #     "user": from_contact.payload.alias,
         #     "time": datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
